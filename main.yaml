@@ -15,7 +15,7 @@
         state: restarted
 
   pre_tasks:
-    - name: Override Apache vars for Red Hat.
+    - name: Override Apache variables for Red Hat.
       set_fact:
         apache_backend: httpd
         apache_service: httpd
