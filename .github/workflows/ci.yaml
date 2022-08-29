@@ -1,22 +1,24 @@
 ---
-name: Continuous integration
+name: CI
 'on':
   pull_request:
   push:
     branches:
-      - main
+      - master
 
 jobs:
+
   test:
     name: Molecule
-    runs-on: Ubuntu-latest
-    strategy: 
+    runs-on: ubuntu-latest
+    strategy:
       matrix:
         distro:
           - centos8
           - debian10
+
     steps:
-      - name: Check out the codebase
+      - name: Check out the codebase.
         uses: actions/checkout@v2
 
       - name: Set up Python 3.
@@ -25,7 +27,11 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install molecule docker molecule-docker yamllint ansible-lint
+        run: pip3 install ansible molecule[docker] docker yamllint ansible-lint
 
-      - name: run molecule tests
+      - name: Run Molecule tests.
         run: molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
